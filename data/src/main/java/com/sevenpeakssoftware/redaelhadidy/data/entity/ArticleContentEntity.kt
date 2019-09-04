@@ -3,7 +3,7 @@ package com.sevenpeakssoftware.redaelhadidy.data.entity
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Content(
+data class ArticleContentEntity(
     @SerializedName("id")
     @Expose
     val id: Int,
@@ -15,7 +15,10 @@ data class Content(
     val dateTime: String,
     @SerializedName("tags")
     @Expose
-    val tags: Iterator<Any>,
+    val tags: Iterator<Any>?,
+    @SerializedName("content")
+    @Expose
+    val contents: Iterator<ContentEntity>?,
     @SerializedName("ingress")
     @Expose
     val ingress: String,

@@ -37,5 +37,6 @@ dependencies {
     testImplementation "androidx.test.ext:junit:$junit_version"
     testImplementation "androidx.test:runner:$testrunner_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.mockito:mockito-inline:$mockito_version"
 
 }

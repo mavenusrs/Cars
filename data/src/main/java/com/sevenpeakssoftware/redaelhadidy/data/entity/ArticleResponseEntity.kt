@@ -14,7 +14,7 @@ data class ArticleResponseEntity(
     val status: String,
     @SerializedName("articleContent")
     @Expose
-    val content: Iterator<Content>,
+    val articleContentEntity: Iterator<ArticleContentEntity>,
     @SerializedName("serverTime")
     @Expose
     val serverTime: Long

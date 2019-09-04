@@ -4,11 +4,11 @@ import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleContent
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleResponse
 
 import io.reactivex.Completable
-import io.reactivex.Maybe
+import io.reactivex.Flowable
 
 interface ArticleRepository {
-    fun getCarsFeed(): Maybe<ArticleResponse>
+    fun getCarsFeed(): Flowable<ArticleResponse>
 
-    fun getCashedCarsFeed(): Maybe<Iterator<ArticleContent>>
+    fun getCashedCarsFeed(): Flowable<Iterator<ArticleContent>>
     fun cashedCarsFeed(articleContents: Iterator<ArticleContent>): Completable
 }

@@ -11,15 +11,11 @@ import java.util.*
 class SynchronizationEngine(private val synchronizationRepository: SynchronizationRepository) {
 
     fun syncSuccessfully(apiPath: String, serverTime: Long) {
-        updateSyncTime(apiPath, serverTime)
+        synchronizationRepository.saveRequestTimeDate(apiPath, serverTime)
     }
 
     fun syncFailed(apiPath: String) {
         synchronizationRepository.removeRequestTimeDate(apiPath)
-    }
-
-    private fun updateSyncTime(apiPath: String, serverTime: Long) {
-        synchronizationRepository.saveRequestTimeDate(apiPath, serverTime)
     }
 
     /**
@@ -27,18 +23,14 @@ class SynchronizationEngine(private val synchronizationRepository: Synchronizati
      * may be on the future we fix this also by depend on silent GCM to invalidate cashed time
      * to sync from server
      */
-    fun shouldSyncWithServer(
-        apiPath: String,
-        timeToRefreshOnInMillis: Int = TIME_TO_SYNC
-    ): Boolean {
+    fun shouldSyncWithServer(apiPath: String, timeToRefreshOnInMillis: Int = TIME_TO_SYNC): Boolean {
 
-        val lastSyncedTimeInMillis = synchronizationRepository.getRequestTimeDate(apiPath)
+        val lastSyncedTimeInMillis = synchronizationRepository.getLastRequestTimeDate(apiPath)
         if (lastSyncedTimeInMillis != null) {  //is valid
             val expiredCashTimeInMillis = lastSyncedTimeInMillis + timeToRefreshOnInMillis
             val currentTimeInMillis = Calendar.getInstance().timeInMillis
 
-            if (expiredCashTimeInMillis > currentTimeInMillis) {
-                updateSyncTime(apiPath, expiredCashTimeInMillis)
+            if (expiredCashTimeInMillis >= currentTimeInMillis) {
                 return false
             }
         }

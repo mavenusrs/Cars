@@ -1,12 +1,13 @@
 package com.sevenpeakssoftware.redaelhadidy.domain.model
 
 data class ArticleContent(
-    var id: Int? = null,
-    var title: String? = null,
-    var dateTime: String? = null,
-    var tags: Iterator<Any>? = null,
-    var ingress: String? = null,
-    var image: String? = null,
-    var created: Int? = null,
-    var changed: Int? = null
+    val id: Int,
+    val title: String,
+    val dateTime: String,
+    val tags: Iterator<Any>?,
+    val contents: Iterator<Content>?,
+    val ingress: String,
+    val image: String,
+    val created: Int,
+    val changed: Int
 )

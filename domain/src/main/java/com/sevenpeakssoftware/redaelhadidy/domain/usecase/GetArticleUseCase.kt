@@ -8,7 +8,6 @@ import com.sevenpeakssoftware.redaelhadidy.domain.usecase.base.FlowableUseCase
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 
 class GetArticleUseCase(
         private val articleRepository: ArticleRepository,
@@ -18,31 +17,32 @@ class GetArticleUseCase(
     private val apiPath = "article/get_articles_list"
 
     override fun execute(): Flowable<Iterator<ArticleContent>> {
-        val carFeedFromCashMaybe = getCarFeedFromCash()
-        var carFeedsFromServer: Maybe<Iterator<ArticleContent>>? = null
+        val carFeedsFromCash = getCarFeedFromCash()
+        var carFeedsFromServer: Flowable<Iterator<ArticleContent>>? = null
 
         if (synchronizationEngine.shouldSyncWithServer(apiPath)) {
             carFeedsFromServer = getCarFeedFromServer().map {
                 saveSyncTime(it.serverTime)
                 cashCarsFeed(it.articlesContent)
                 return@map it.articlesContent
-            }.subscribeOn(Schedulers.io())
+            }
         }
         carFeedsFromServer?.apply {
-            return Maybe.concat(carFeedFromCashMaybe, carFeedsFromServer)
+            return Flowable.concat(carFeedsFromCash, carFeedsFromServer)
         }
-        return carFeedFromCashMaybe.toFlowable()
+        return carFeedsFromCash
 
     }
 
-    private fun getCarFeedFromCash(): Maybe<Iterator<ArticleContent>> {
+    private fun getCarFeedFromCash(): Flowable<Iterator<ArticleContent>> {
         return articleRepository.getCashedCarsFeed().filter {
             it.hasNext()
         }
     }
 
-    private fun cashCarsFeed(content: Iterator<ArticleContent>) =
-        articleRepository.cashedCarsFeed(content)
+    private fun cashCarsFeed(content: Iterator<ArticleContent>): Completable {
+        return articleRepository.cashedCarsFeed(content)
+    }
 
     private fun saveSyncTime(serverTime: Long): Completable {
         synchronizationEngine.syncSuccessfully(apiPath, serverTime)
