@@ -34,6 +34,8 @@ dependencies {
 
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
 
+    api "com.squareup.retrofit2:retrofit:${retrofit_version}"
+
     testImplementation "androidx.test.ext:junit:$junit_version"
     testImplementation "androidx.test:runner:$testrunner_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"

@@ -1,9 +1,9 @@
 package com.sevenpeakssoftware.redaelhadidy.domain.model
 
-import java.lang.Exception
+import com.sevenpeakssoftware.redaelhadidy.domain.errorchecker.ArticleException
 
-sealed class ResultState<T> {
-    data class Loading<T>(val data: T?) : ResultState<T>()
-    data class Success<T>(val data: T) : ResultState<T>()
-    data class Failed<T>(val exception: Exception, val cashedData: T?) : ResultState<T>()
+sealed class ResultState<out T: Any> {
+    data class Success<T : Any>(val data: T) : ResultState<T>()
+    data class Failed<T : Any>(val exception: ArticleException, val cashedData: T?) : ResultState<T>()
+    object Loading : ResultState<Nothing>()
 }

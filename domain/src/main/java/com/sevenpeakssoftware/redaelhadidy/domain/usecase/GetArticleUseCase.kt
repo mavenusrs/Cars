@@ -5,18 +5,17 @@ import com.sevenpeakssoftware.redaelhadidy.domain.repository.ArticleRepository
 import com.sevenpeakssoftware.redaelhadidy.domain.sync.SynchronizationEngine
 import com.sevenpeakssoftware.redaelhadidy.domain.usecase.base.FlowableUseCase
 
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.Completable
 import io.reactivex.Flowable
 
 class GetArticleUseCase(
-        private val articleRepository: ArticleRepository,
-        private val synchronizationEngine: SynchronizationEngine
+    private val articleRepository: ArticleRepository,
+    private val synchronizationEngine: SynchronizationEngine
 ) : FlowableUseCase<Iterator<ArticleContent>>() {
 
     private val apiPath = "article/get_articles_list"
 
-    override fun execute(): Flowable<Iterator<ArticleContent>> {
+    override fun run(): Flowable<Iterator<ArticleContent>> {
         val carFeedsFromCash = getCarFeedFromCash()
         var carFeedsFromServer: Flowable<Iterator<ArticleContent>>? = null
 
