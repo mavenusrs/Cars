@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Cars</string>
     <string name="reload">reload</string>
+    <string name="sorry_there_is_no_feeds">Sorry, there is no feeds!!</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.sevenpeakssoftware.redaelhadidy.domain.usecase
 
+import com.sevenpeakssoftware.redaelhadidy.domain.common.SERVER_GENERAL_ERROR
 import com.sevenpeakssoftware.redaelhadidy.domain.errorchecker.ArticleException
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleContent
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleResponse
@@ -48,14 +49,32 @@ class GetArticleUseCaseTest {
 
     @Test
     fun `when get car feeds return error`() {
-        val articleException = ArticleException(0, Exception(""))
+        val errorCode = SERVER_GENERAL_ERROR
+
+        val articleException = ArticleException(throwable = Exception("error mocked"))
+
         `when`(mockedArticleRepository.getCashedCarsFeed()).thenReturn(
             Flowable.error(
                 articleException
             )
         )
-        getArticleUseCase.execute().test()
-            .assertError(articleException)
+
+        `when`(
+            synchronizationEngine
+                .shouldSyncWithServer(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())
+        )
+            .thenReturn(false)
+
+
+        val testSubscriber = getArticleUseCase.execute().test()
+        testSubscriber.assertValue {
+            val articleException1 = (it as ResultState.Failed<*>).exception
+            articleException1.errorCause == errorCode
+        }
+        testSubscriber.assertComplete()
+
+        testSubscriber.dispose()
+
     }
 
     @Test

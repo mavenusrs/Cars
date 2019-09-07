@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity() {
             it.forEach {
                 stringBuilder.append(it.toString())
             }
-            contentTV.text = stringBuilder
 
 
         }.addsTo(compositeDisposable)
