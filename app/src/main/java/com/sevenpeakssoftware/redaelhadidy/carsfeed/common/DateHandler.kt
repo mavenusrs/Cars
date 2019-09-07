@@ -20,8 +20,8 @@ class DateHandler(private val context: Context){
         val calendar = Calendar.getInstance()
         calendar.time = sourceTime
         val currentYear = calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
-        val is12 = android.text.format.DateFormat.is24HourFormat(context)
+        val is24 = android.text.format.DateFormat.is24HourFormat(context)
 
-        return "dd MMMM${if (currentYear) "" else " yyyy"}, HH:mm${if (is12) " aa" else ""}"
+        return "dd MMMM${if (currentYear) "" else " yyyy"}, HH:mm${if (is24) "" else " aa"}"
     }
 }
