@@ -27,8 +27,8 @@ class ArticleListPresenter @Inject constructor(
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadArticle() {
-        handleLoadingState(ResultState.Loading)
-        useCase.execute().startWith(ResultState.Loading)
+        useCase.execute()
+            .startWith(ResultState.Loading)
             .subscribeOn(subscribeScheduler)
             .observeOn(observerScheduler)
             .subscribe {
@@ -46,6 +46,8 @@ class ArticleListPresenter @Inject constructor(
         when (resultState) {
             is ResultState.Success -> handleLoadedArticlesSuccessfully(resultState.data)
             is ResultState.Failed -> errorLoadingArticle(resultState.exception)
+            is ResultState.Loading -> handleLoadingState(resultState)
+
         }
     }
 

@@ -1,6 +1,7 @@
 package com.sevenpeakssoftware.redaelhadidy.carsfeed.di
 
 import android.content.Context
+import com.sevenpeakssoftware.redaelhadidy.carsfeed.route.Router
 import com.sevenpeakssoftware.redaelhadidy.data.common.DeviceHandler
 import com.sevenpeakssoftware.redaelhadidy.data.local.SharedPreferenceHandler
 import dagger.Module
@@ -18,13 +19,19 @@ class ApplicationModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun proviceSharedPreferenceHandler(context: Context): SharedPreferenceHandler {
+    fun provideSharedPreferenceHandler(context: Context): SharedPreferenceHandler {
         return SharedPreferenceHandler(context)
     }
 
     @Singleton
     @Provides
-    fun proviceDeviceHandler(context: Context): DeviceHandler {
+    fun provideDeviceHandler(context: Context): DeviceHandler {
         return DeviceHandler(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRouter(): Router {
+        return Router(context)
     }
 }

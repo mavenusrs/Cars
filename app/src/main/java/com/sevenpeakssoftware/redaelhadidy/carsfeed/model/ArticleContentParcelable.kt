@@ -10,11 +10,11 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class ArticleContentParcelable(
-    private val id: Int?,
-    private val title: String?,
-    private val dateTime: String?,
-    private val ingress: String?,
-    private val image: String?
+     val id: Int?,
+     val title: String?,
+     val dateTime: String?,
+     val ingress: String?,
+     val image: String?
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="error_key">
+        <item>1002</item>
+        <item>1001</item>
+    </string-array>
+    <string-array name="error_value">
+        <item>Error retrieving feeds, try again later!</item>
+        <item>There is some sort of errors happens. try again later!</item>
+    </string-array>
+</resources>

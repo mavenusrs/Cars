@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/black"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/article_right_margin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/articleIV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/place_holder" />
+
+        <TextView
+            android:id="@+id/articleTitleTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/articleIV"
+            android:background="@drawable/text_bg_gradiant"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="start"
+            android:paddingStart="@dimen/article_left_margin"
+            android:paddingEnd="@dimen/article_right_margin"
+            android:textColor="@color/white_color"
+            android:textSize="@dimen/title_font_size" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/articleDateTimeTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:gravity="start"
+        android:paddingStart="@dimen/article_left_margin"
+        android:paddingTop="@dimen/date_margin"
+        android:paddingEnd="@dimen/article_right_margin"
+        android:textColor="@color/gray_text_color"
+        android:textSize="@dimen/subtitle_font_size" />
+
+    <TextView
+        android:id="@+id/articleIngressTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:gravity="start"
+        android:paddingStart="@dimen/article_left_margin"
+        android:paddingTop="@dimen/ingress_margin"
+        android:paddingEnd="@dimen/article_right_margin"
+        android:textColor="@color/white_color"
+        android:textSize="@dimen/subtitle_font_size" />
+</LinearLayout>
