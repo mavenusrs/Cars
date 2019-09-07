@@ -11,35 +11,40 @@ import com.sevenpeakssoftware.redaelhadidy.domain.model.Content
  * Map entities to Domain models
  */
 
-fun mapToArticleContentsIteratorEntity(contents: Iterator<ArticleContent>): Iterator<ArticleContentEntity> {
-    contents.apply {
-        val articleContentEntitis = ArrayList<ArticleContentEntity>()
+fun mapToArticleContentsListEntity(contents: List<ArticleContent>): List<ArticleContentEntity> {
+    val articleContentEntitis = ArrayList<ArticleContentEntity>()
 
-        forEach {
-            articleContentEntitis.add(mapToArticleContentEntity(it))
-        }
-        return articleContentEntitis.iterator()
+    contents.map {
+        articleContentEntitis.add(mapToArticleContentEntity(it))
     }
+
+    return articleContentEntitis
 }
+
 
 fun mapToArticleContentEntity(articleContent: ArticleContent): ArticleContentEntity {
     articleContent.apply {
         return ArticleContentEntity(
-            id, title, dateTime, tags, contents?.let { mapToContentIteratorEntity(it) },
-            ingress, image, created, changed
+            id,
+            title,
+            dateTime,
+            tags?.toList(),
+            contents?.let { mapToContentListEntity(it).toList() },
+            ingress,
+            image,
+            created,
+            changed
         )
     }
 }
 
-fun mapToContentIteratorEntity(contents: Iterator<Content>): Iterator<ContentEntity> {
+fun mapToContentListEntity(contents: List<Content>): List<ContentEntity> {
     val contentEntities = ArrayList<ContentEntity>()
 
-    contents.apply {
-        forEach {
-            contentEntities.add(mapToContentEntity(it))
-        }
-        return contentEntities.iterator()
+    contents.map {
+        contentEntities.add(mapToContentEntity(it))
     }
+    return contentEntities
 }
 
 fun mapToContentEntity(content: Content): ContentEntity {

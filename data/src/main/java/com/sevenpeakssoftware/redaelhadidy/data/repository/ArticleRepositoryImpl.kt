@@ -1,10 +1,10 @@
 package com.sevenpeakssoftware.redaelhadidy.data.repository
 
-import com.sevenpeakssoftware.redaelhadidy.data.entity.mapper.mapToArticleContentsIterator
-import com.sevenpeakssoftware.redaelhadidy.data.entity.mapper.mapToArticleContentsIteratorEntity
+import com.sevenpeakssoftware.redaelhadidy.data.entity.mapper.mapToArticleContentsList
+import com.sevenpeakssoftware.redaelhadidy.data.entity.mapper.mapToArticleContentsListEntity
 import com.sevenpeakssoftware.redaelhadidy.data.entity.mapper.mapToArticleResponse
-import com.sevenpeakssoftware.redaelhadidy.data.local.ArticleFeedApi
-import com.sevenpeakssoftware.redaelhadidy.data.remote.ArticleFeedDAO
+import com.sevenpeakssoftware.redaelhadidy.data.remote.ArticleFeedApi
+import com.sevenpeakssoftware.redaelhadidy.data.local.ArticleFeedDAO
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleContent
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleResponse
 import com.sevenpeakssoftware.redaelhadidy.domain.repository.ArticleRepository
@@ -19,21 +19,20 @@ class ArticleRepositoryImpl(
 
     override fun getCarsFeed(): Flowable<ArticleResponse> {
         return articleFeedApi.getCarsFeed().map {
+            Thread.sleep(10000)
             mapToArticleResponse(it)
         }
     }
 
-    override fun getCashedCarsFeed(): Flowable<Iterator<ArticleContent>> {
-        return articleFeedDAO.getCarsFeed().map {
-            mapToArticleContentsIterator(it)
+    override fun getCashedCarsFeed(): Flowable<List<ArticleContent>> {
+        return articleFeedDAO.getCarsFeed().toFlowable().map {
+            mapToArticleContentsList(it)
         }
     }
 
-    override fun cashedCarsFeed(articleContents: Iterator<ArticleContent>): Completable {
-        return articleFeedDAO.clearCarsFeed()
-            .concatWith(
-                articleFeedDAO
-                    .insertCarsFeed(mapToArticleContentsIteratorEntity(articleContents))
-            )
+    override fun cashedCarsFeed(articleContents: List<ArticleContent>): Completable {
+        articleFeedDAO.clearCarsFeed()
+        articleFeedDAO.insertCarsFeeds(mapToArticleContentsListEntity(articleContents))
+        return Completable.complete()
     }
 }

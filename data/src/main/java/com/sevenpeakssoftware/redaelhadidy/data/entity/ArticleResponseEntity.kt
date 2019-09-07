@@ -12,9 +12,9 @@ data class ArticleResponseEntity(
     @SerializedName("status")
     @Expose
     val status: String,
-    @SerializedName("articleContent")
+    @SerializedName("content")
     @Expose
-    val articleContentEntity: Iterator<ArticleContentEntity>,
+    val articleContentEntity: List<ArticleContentEntity>,
     @SerializedName("serverTime")
     @Expose
     val serverTime: Long

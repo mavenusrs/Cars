@@ -3,6 +3,7 @@ package com.sevenpeakssoftware.redaelhadidy.domain.usecase
 import com.sevenpeakssoftware.redaelhadidy.domain.errorchecker.ArticleException
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleContent
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleResponse
+import com.sevenpeakssoftware.redaelhadidy.domain.model.ResultState
 import com.sevenpeakssoftware.redaelhadidy.domain.repository.ArticleRepository
 import com.sevenpeakssoftware.redaelhadidy.domain.sync.SynchronizationEngine
 import io.reactivex.Flowable
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeUnit
 @RunWith(MockitoJUnitRunner::class)
 class GetArticleUseCaseTest {
     private val expectedEmptyLiveResult = Flowable.empty<ArticleResponse>()
-    private val expectedEmptyCashedResult = Flowable.empty<Iterator<ArticleContent>>()
+    private val expectedEmptyCashedResult = Flowable.empty<List<ArticleContent>>()
     private val testScheduler = TestScheduler()
 
     @Mock
@@ -28,17 +29,17 @@ class GetArticleUseCaseTest {
     private lateinit var synchronizationEngine: SynchronizationEngine
 
     private lateinit var getArticleUseCase: GetArticleUseCase
-    private lateinit var sampleLiveArticles: Iterator<ArticleContent>
-    private lateinit var sampleCashedArticles: Iterator<ArticleContent>
+    private lateinit var sampleLiveArticles: List<ArticleContent>
+    private lateinit var sampleCashedArticles: List<ArticleContent>
     private lateinit var expectedLiveResult: Flowable<ArticleResponse>
-    private lateinit var expectedCashedResult: Flowable<Iterator<ArticleContent>>
+    private lateinit var expectedCashedResult: Flowable<List<ArticleContent>>
 
     @Before
     fun setup() {
         getArticleUseCase = GetArticleUseCase(mockedArticleRepository, synchronizationEngine)
 
-        sampleLiveArticles = getIteratorOfLiveContentForTest()
-        sampleCashedArticles = getIteratorOfCashedContentForTest()
+        sampleLiveArticles = getListOfLiveContentForTest()
+        sampleCashedArticles = getListOfCashedContentForTest()
         expectedLiveResult =
             Flowable.just(ArticleResponse(System.currentTimeMillis(), sampleLiveArticles))
         expectedCashedResult = Flowable.just(sampleCashedArticles)
@@ -47,7 +48,7 @@ class GetArticleUseCaseTest {
 
     @Test
     fun `when get car feeds return error`() {
-        val articleException = ArticleException(0, "")
+        val articleException = ArticleException(0, Exception(""))
         `when`(mockedArticleRepository.getCashedCarsFeed()).thenReturn(
             Flowable.error(
                 articleException
@@ -117,7 +118,7 @@ class GetArticleUseCaseTest {
 
         testScheduler.advanceTimeBy(2, TimeUnit.SECONDS)
         testSubscriber
-            .assertValue(sampleLiveArticles)
+            .assertValue(ResultState.Success(sampleLiveArticles))
             .assertNoErrors()
     }
 
@@ -136,7 +137,7 @@ class GetArticleUseCaseTest {
         val testSubscriber = getArticleUseCase.execute().test()
         testScheduler.advanceTimeBy(5, TimeUnit.SECONDS)
 
-        testSubscriber.assertValue(sampleCashedArticles)
+        testSubscriber.assertValue(ResultState.Success(sampleCashedArticles))
             .assertNoErrors()
     }
 
@@ -159,16 +160,16 @@ class GetArticleUseCaseTest {
 
         testSubscriber.assertNoValues()
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        testSubscriber.assertValueAt(0, sampleCashedArticles)
+        testSubscriber.assertValueAt(0, ResultState.Success(sampleCashedArticles))
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        testSubscriber.assertValueAt(1, sampleLiveArticles)
+        testSubscriber.assertValueAt(1, ResultState.Success(sampleLiveArticles))
 
         // TODO how could I test when cashing live data, after fetch live data
 
     }
 
-    private fun getIteratorOfCashedContentForTest(): Iterator<ArticleContent> {
+    private fun getListOfCashedContentForTest(): List<ArticleContent> {
         val articleContent1 = ArticleContent(
             1, "content 1",
             "25.05.2018 14:13", null, null, "", "", 1, 2
@@ -182,10 +183,10 @@ class GetArticleUseCaseTest {
             "25.05.2018 14:13", null, null, "", "", 1, 2
         )
 
-        return arrayOf(articleContent1, articleContent2, articleContent3).iterator()
+        return arrayOf(articleContent1, articleContent2, articleContent3).toList()
     }
 
-    private fun getIteratorOfLiveContentForTest(): Iterator<ArticleContent> {
+    private fun getListOfLiveContentForTest(): List<ArticleContent> {
         val articleContent1 = ArticleContent(
             4, "content 4",
             "25.05.2018 14:13", null, null, "", "", 1, 2
@@ -199,7 +200,7 @@ class GetArticleUseCaseTest {
             "25.05.2018 14:13", null, null, "", "", 1, 2
         )
 
-        return arrayOf(articleContent1, articleContent2, articleContent3).iterator()
+        return arrayOf(articleContent1, articleContent2, articleContent3).toList()
     }
 
 }

@@ -1,7 +1,7 @@
 package com.sevenpeakssoftware.redaelhadidy.carsfeed.presenter
 
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.model.ArticleContentParcelable
-import com.sevenpeakssoftware.redaelhadidy.carsfeed.model.mapToArticleContentsParcelIterator
+import com.sevenpeakssoftware.redaelhadidy.carsfeed.model.mapper.mapToArticleContentsParcelList
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.common.BehaviorSubjectTrigger
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.common.addsTo
 import com.sevenpeakssoftware.redaelhadidy.domain.errorchecker.ArticleException
@@ -17,7 +17,7 @@ class ArticleListPresenter(
     private val observerScheduler: Scheduler
 ) {
     val articlesBehaviourSubjectTrigger =
-        BehaviorSubjectTrigger<Iterator<ArticleContentParcelable>>()
+        BehaviorSubjectTrigger<List<ArticleContentParcelable>>()
     val errorBehaviourSubjectTrigger =
         BehaviorSubjectTrigger<ArticleException>()
     val loadingBehaviourSubjectTrigger =
@@ -41,7 +41,7 @@ class ArticleListPresenter(
         compositeDisposable.clear()
     }
 
-    private fun handleResponse(resultState: ResultState<Iterator<ArticleContent>>) {
+    private fun handleResponse(resultState: ResultState<List<ArticleContent>>) {
         when (resultState) {
             is ResultState.Success -> handleLoadedArticlesSuccessfully(resultState.data)
             is ResultState.Failed -> errorLoadingArticle(resultState.exception)
@@ -59,9 +59,13 @@ class ArticleListPresenter(
         errorBehaviourSubjectTrigger.trigger(failedState)
     }
 
-    private fun handleLoadedArticlesSuccessfully(articleContents: Iterator<ArticleContent>) {
+    private fun handleLoadedArticlesSuccessfully(articleContents: List<ArticleContent>) {
         loadingBehaviourSubjectTrigger.trigger(false)
-        articlesBehaviourSubjectTrigger.trigger(mapToArticleContentsParcelIterator(articleContents))
+        articlesBehaviourSubjectTrigger.trigger(
+            mapToArticleContentsParcelList(
+                articleContents
+            )
+        )
     }
 }
 

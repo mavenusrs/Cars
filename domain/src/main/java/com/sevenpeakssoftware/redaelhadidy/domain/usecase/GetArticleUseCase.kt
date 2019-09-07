@@ -7,17 +7,18 @@ import com.sevenpeakssoftware.redaelhadidy.domain.usecase.base.FlowableUseCase
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 
 class GetArticleUseCase(
     private val articleRepository: ArticleRepository,
     private val synchronizationEngine: SynchronizationEngine
-) : FlowableUseCase<Iterator<ArticleContent>>() {
+) : FlowableUseCase<List<ArticleContent>>() {
 
     private val apiPath = "article/get_articles_list"
 
-    override fun run(): Flowable<Iterator<ArticleContent>> {
+    override fun run(): Flowable<List<ArticleContent>> {
         val carFeedsFromCash = getCarFeedFromCash()
-        var carFeedsFromServer: Flowable<Iterator<ArticleContent>>? = null
+        var carFeedsFromServer: Flowable<List<ArticleContent>>? = null
 
         if (synchronizationEngine.shouldSyncWithServer(apiPath)) {
             carFeedsFromServer = getCarFeedFromServer().map {
@@ -33,13 +34,11 @@ class GetArticleUseCase(
 
     }
 
-    private fun getCarFeedFromCash(): Flowable<Iterator<ArticleContent>> {
-        return articleRepository.getCashedCarsFeed().filter {
-            it.hasNext()
-        }
+    private fun getCarFeedFromCash(): Flowable<List<ArticleContent>> {
+        return articleRepository.getCashedCarsFeed()
     }
 
-    private fun cashCarsFeed(content: Iterator<ArticleContent>): Completable {
+    private fun cashCarsFeed(content: List<ArticleContent>): Completable {
         return articleRepository.cashedCarsFeed(content)
     }
 

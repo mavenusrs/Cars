@@ -10,7 +10,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class ArticleContentParcelable(
-    private val id: Int,
+    private val id: Int?,
     private val title: String?,
     private val dateTime: String?,
     private val ingress: String?,
@@ -35,6 +35,10 @@ data class ArticleContentParcelable(
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun toString(): String {
+        return "Id: $id, Title: $title, DataTime: $dateTime, Ingress: $ingress, ImageURL, $image"
     }
 
     companion object CREATOR : Parcelable.Creator<ArticleContentParcelable> {

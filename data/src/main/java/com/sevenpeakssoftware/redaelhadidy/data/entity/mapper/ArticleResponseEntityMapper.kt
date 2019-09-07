@@ -14,37 +14,35 @@ import com.sevenpeakssoftware.redaelhadidy.domain.model.Content
  */
 fun mapToArticleResponse(articleResponseEntity: ArticleResponseEntity): ArticleResponse {
     articleResponseEntity.apply {
-        return ArticleResponse(serverTime, mapToArticleContentsIterator(articleContentEntity))
+        return ArticleResponse(serverTime, mapToArticleContentsList(articleContentEntity))
     }
 }
 
-fun mapToArticleContentsIterator(contents: Iterator<ArticleContentEntity>): Iterator<ArticleContent> {
-    contents.apply {
-        val articleContents = ArrayList<ArticleContent>()
+fun mapToArticleContentsList(contents: List<ArticleContentEntity>): List<ArticleContent> {
+    val articleContents = ArrayList<ArticleContent>()
 
-        forEach {
-            articleContents.add(mapToArticleContent(it))
-        }
-        return articleContents.iterator()
+    contents.map {
+        articleContents.add(mapToArticleContent(it))
     }
+    return articleContents
 }
 
 fun mapToArticleContent(articleContentEntity: ArticleContentEntity): ArticleContent {
     articleContentEntity.apply {
-        return ArticleContent(id, title, dateTime, tags,
-            contents?.let { mapToContentIterator(it) }, ingress, image, created, changed)
+        return ArticleContent(
+            id, title, dateTime, tags,
+            contents?.let { mapToContentList(it).toList() }, ingress, image, created, changed
+        )
     }
 }
 
-fun mapToContentIterator(contentEntities: Iterator<ContentEntity>): Iterator<Content> {
+fun mapToContentList(contentEntities: List<ContentEntity>): List<Content> {
     val contents = ArrayList<Content>()
 
-    contentEntities.apply {
-        forEach {
-            contents.add(mapToContent(it))
-        }
-        return contents.iterator()
+    contentEntities.map {
+        contents.add(mapToContent(it))
     }
+    return contents
 }
 
 fun mapToContent(contentEntity: ContentEntity): Content {

@@ -1,8 +1,14 @@
 package com.sevenpeakssoftware.redaelhadidy.data.entity
 
+import com.google.gson.annotations.Expose
+
 data class ContentEntity(
-    val id: Int,
-    val type: String,
-    val subject: String,
-    val description: String
+    @Expose
+    val id: Int?,
+    @Expose
+    val type: String?,
+    @Expose
+    val subject: String?,
+    @Expose
+    val description: String?
 )

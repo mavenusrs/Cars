@@ -1,34 +1,51 @@
 package com.sevenpeakssoftware.redaelhadidy.data.entity
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ArticleContentEntity(
+@Entity(tableName = "article_tbl")
+data class ArticleContentEntity (
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     @Expose
-    val id: Int,
+    var id: Int?,
     @SerializedName("title")
     @Expose
-    val title: String,
+    @ColumnInfo(name = "title")
+    var title: String,
     @SerializedName("dateTime")
     @Expose
-    val dateTime: String,
+    @ColumnInfo(name = "dateTime")
+    var dateTime: String,
     @SerializedName("tags")
     @Expose
-    val tags: Iterator<Any>?,
+    @Ignore
+    var tags: List<Any>?,
     @SerializedName("content")
     @Expose
-    val contents: Iterator<ContentEntity>?,
+    @Ignore
+    var contents: List<ContentEntity>?,
     @SerializedName("ingress")
     @Expose
-    val ingress: String,
+    @ColumnInfo(name = "ingress")
+    var ingress: String,
     @SerializedName("image")
     @Expose
-    val image: String,
+    @ColumnInfo(name = "image")
+    var image: String,
     @SerializedName("created")
     @Expose
-    val created: Int,
+    @Ignore
+    var created: Int,
     @SerializedName("changed")
     @Expose
-    val changed: Int
-)
+    @Ignore
+    var changed: Int
+){
+    constructor():this(null,"", "", null, null, "", "", 0, 0)
+}
