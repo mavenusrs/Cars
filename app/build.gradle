@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: "kotlin-kapt"
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -50,5 +52,11 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofit_version}"
     implementation "com.squareup.okhttp3:logging-interceptor:4.1.1"
     implementation "androidx.room:room-runtime:$room_version"
+
+    //Dagger
+    implementation "com.google.dagger:dagger-android:${dagger2_Version}"
+    implementation "com.google.dagger:dagger-android-support:${dagger2_Version}"
+    kapt "com.google.dagger:dagger-android-processor:${dagger2_Version}"
+    kapt "com.google.dagger:dagger-compiler:${dagger2_Version}"
 
 }

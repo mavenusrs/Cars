@@ -19,7 +19,6 @@ class ArticleRepositoryImpl(
 
     override fun getCarsFeed(): Flowable<ArticleResponse> {
         return articleFeedApi.getCarsFeed().map {
-            Thread.sleep(10000)
             mapToArticleResponse(it)
         }
     }

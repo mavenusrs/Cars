@@ -10,12 +10,13 @@ import com.sevenpeakssoftware.redaelhadidy.domain.model.ResultState
 import com.sevenpeakssoftware.redaelhadidy.domain.usecase.GetArticleUseCase
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
+import javax.inject.Named
 
-class ArticleListPresenter(
+class ArticleListPresenter @Inject constructor(
     private val useCase: GetArticleUseCase,
-    private val subscribeScheduler: Scheduler,
-    private val observerScheduler: Scheduler
-) {
+    @Named("subscribe") private val subscribeScheduler: Scheduler,
+    @Named("observer") private val observerScheduler: Scheduler) {
     val articlesBehaviourSubjectTrigger =
         BehaviorSubjectTrigger<List<ArticleContentParcelable>>()
     val errorBehaviourSubjectTrigger =
