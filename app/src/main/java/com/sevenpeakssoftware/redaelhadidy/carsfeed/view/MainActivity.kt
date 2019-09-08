@@ -54,9 +54,9 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
     private fun subscribeToPresenter() {
         presenter.articlesBehaviourSubjectTrigger.observer().subscribe {
             it?.apply {
-                if (it.isEmpty()){
+                if (it.isEmpty()) {
                     showEmptyMessage()
-                }else{
+                } else {
                     showListOfArticle(it)
                 }
             }
@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
 
         presenter.errorBehaviourSubjectTrigger.observer().subscribe {
             showError(getAppropriateMessage(this@MainActivity, it))
-            retry.setOnClickListener { presenter.loadArticle() }
 
         }.addsTo(compositeDisposable)
 
@@ -77,7 +76,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
 
     private fun getAppropriateMessage(
         context: Context,
-        articleException: ArticleException?): String {
+        articleException: ArticleException?
+    ): String {
         var index = -1
 
         val errorKeys = context.resources.getStringArray(R.array.error_key)
@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
     fun showError(errorMessage: String) {
         toggleViewVisibility(showError = true)
         errorTV.text = errorMessage
+        retry.setOnClickListener { presenter.loadArticle() }
     }
 
     fun showEmptyMessage() {
@@ -125,9 +126,10 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
         showError: Boolean = false,
         showEmpty: Boolean = false,
         showList: Boolean = false,
-        showLoading: Boolean = false) {
+        showLoading: Boolean = false
+    ) {
 
-        errorTV.visibility = if (showError) View.VISIBLE else View.GONE
+        error_layoutt.visibility = if (showError) View.VISIBLE else View.GONE
         emptyTV.visibility = if (showEmpty) View.VISIBLE else View.GONE
         articleSRL.visibility = if (showList) View.VISIBLE else View.GONE
         loadingProgressBar.visibility = if (showLoading) View.VISIBLE else View.GONE

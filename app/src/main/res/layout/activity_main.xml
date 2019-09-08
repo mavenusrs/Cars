@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/error_lyt"
+        android:id="@+id/error_layoutt"
         layout="@layout/error_lyt"
         android:visibility="gone" />
 
