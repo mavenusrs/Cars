@@ -1,21 +1,23 @@
 package com.sevenpeakssoftware.redaelhadidy.carsfeed.view
 
+import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sevenpeakssoftware.redaelhadidy.carsfeed.CarsApplication
 
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.R
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.common.addsTo
-import com.sevenpeakssoftware.redaelhadidy.carsfeed.di.ApplicationModule
-import com.sevenpeakssoftware.redaelhadidy.carsfeed.di.DaggerMainComponenet
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.model.ArticleContentParcelable
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.presenter.ArticleListPresenter
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.route.ARTICLE_DETAIL_EXTRA
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.route.Router
 import com.sevenpeakssoftware.redaelhadidy.domain.errorchecker.ArticleException
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
 
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,14 +25,16 @@ import kotlinx.android.synthetic.main.error_lyt.*
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), OnItemClickListener {
-
-    private val compositeDisposable = CompositeDisposable()
+class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInjector {
 
     @Inject
     lateinit var presenter: ArticleListPresenter
     @Inject
     lateinit var router: Router
+    @Inject
+    lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
+
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +45,10 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         subscribeToPresenter()
 
         presenter.loadArticle()
-
     }
 
     private fun injection() {
-        DaggerMainComponenet.builder()
-            .applicationModule(ApplicationModule(this))
-            .build().jnject(this)
+        (application as CarsApplication).initMainComponent().inject(this)
     }
 
     private fun subscribeToPresenter() {
@@ -144,6 +145,10 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         super.onDestroy()
         presenter.unbound()
         compositeDisposable.clear()
+    }
+
+    override fun activityInjector(): AndroidInjector<Activity> {
+        return dispatchingActivityInjector
     }
 }
 

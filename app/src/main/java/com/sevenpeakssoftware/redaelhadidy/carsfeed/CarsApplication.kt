@@ -1,10 +1,14 @@
 package com.sevenpeakssoftware.redaelhadidy.carsfeed
 
 import android.app.Application
+import com.sevenpeakssoftware.redaelhadidy.carsfeed.di.*
 
-class CarsApplication : Application() {
+open class CarsApplication : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
+    open fun initMainComponent(): MainComponenet {
+        return DaggerMainComponenet.builder()
+            .applicationModule(ApplicationModule(this))
+            .domainModule(DomainModule())
+            .build()
     }
 }

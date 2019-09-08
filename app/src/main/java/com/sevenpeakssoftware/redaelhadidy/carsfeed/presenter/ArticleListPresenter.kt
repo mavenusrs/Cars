@@ -16,7 +16,8 @@ import javax.inject.Named
 class ArticleListPresenter @Inject constructor(
     private val useCase: GetArticleUseCase,
     @Named("subscribe") private val subscribeScheduler: Scheduler,
-    @Named("observer") private val observerScheduler: Scheduler) {
+    @Named("observer") private val observerScheduler: Scheduler
+) {
     val articlesBehaviourSubjectTrigger =
         BehaviorSubjectTrigger<List<ArticleContentParcelable>>()
     val errorBehaviourSubjectTrigger =
@@ -28,9 +29,9 @@ class ArticleListPresenter @Inject constructor(
 
     fun loadArticle() {
         useCase.execute()
-            .startWith(ResultState.Loading)
             .subscribeOn(subscribeScheduler)
             .observeOn(observerScheduler)
+            .startWith(ResultState.Loading)
             .subscribe {
                 it?.apply {
                     handleResponse(it)

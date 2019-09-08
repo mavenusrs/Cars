@@ -7,9 +7,8 @@ import com.sevenpeakssoftware.redaelhadidy.domain.usecase.base.FlowableUseCase
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
 
-class GetArticleUseCase(
+open class GetArticleUseCase(
     private val articleRepository: ArticleRepository,
     private val synchronizationEngine: SynchronizationEngine
 ) : FlowableUseCase<List<ArticleContent>>() {

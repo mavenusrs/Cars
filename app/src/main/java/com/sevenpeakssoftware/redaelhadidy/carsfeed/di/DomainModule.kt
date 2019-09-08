@@ -19,7 +19,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class DomainModule {
+open class DomainModule {
 
     @Provides
     fun provideDatabase(context: Context): ArticleFeedDatabase {
@@ -49,7 +49,7 @@ class DomainModule {
 
     @Singleton
     @Provides
-    fun provideGetArticleUseCase(
+    open fun provideGetArticleUseCase(
         articleRepository: ArticleRepository,
         synchronizationRepository: SynchronizationRepository
     ): GetArticleUseCase {

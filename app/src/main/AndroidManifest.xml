@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sevenpeakssoftware.redaelhadidy.carsfeed">
 
-
     <application
         android:name=".CarsApplication"
         android:allowBackup="true"

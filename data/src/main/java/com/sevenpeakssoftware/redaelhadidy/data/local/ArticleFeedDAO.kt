@@ -2,7 +2,6 @@ package com.sevenpeakssoftware.redaelhadidy.data.local
 
 import androidx.room.*
 import com.sevenpeakssoftware.redaelhadidy.data.entity.ArticleContentEntity
-import io.reactivex.Completable
 import io.reactivex.Single
 
 @Dao
