@@ -35,16 +35,13 @@ class ArticleFeedAdapter(private var list: List<ArticleContentParcelable>?,
     }
 
     class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindView(
-            articleContentParcelable: ArticleContentParcelable,
-            listener: OnItemClickListener
-        ) {
-            with(itemView) {
-                val articleTitleTV = findViewById<TextView>(R.id.articleTitleTV)
-                val articleDateTimeTV = findViewById<TextView>(R.id.articleDateTimeTV)
-                val articleIngressTV = findViewById<TextView>(R.id.articleIngressTV)
-                val articleIV = findViewById<ImageView>(R.id.articleIV)
+        private val articleTitleTV = itemView.findViewById<TextView>(R.id.articleTitleTV)
+        private val articleDateTimeTV = itemView.findViewById<TextView>(R.id.articleDateTimeTV)
+        private val articleIngressTV = itemView.findViewById<TextView>(R.id.articleIngressTV)
+        private val articleIV = itemView.findViewById<ImageView>(R.id.articleIV)
 
+        fun bindView(articleContentParcelable: ArticleContentParcelable,
+            listener: OnItemClickListener) {
                 articleTitleTV.text = articleContentParcelable.title
                 articleContentParcelable.dateTime?.also {
                     articleDateTimeTV.text =
@@ -56,11 +53,6 @@ class ArticleFeedAdapter(private var list: List<ArticleContentParcelable>?,
                     .placeholder(R.drawable.place_holder)
                     .into(articleIV)
                 itemView.setOnClickListener { listener.onItemClick(articleContentParcelable) }
-
-
-            }
-
-
         }
     }
 }
