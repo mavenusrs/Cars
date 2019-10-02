@@ -13,8 +13,10 @@
         <ImageView
             android:id="@+id/articleIV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/image_height"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_refresh_button" />
 
         <TextView
