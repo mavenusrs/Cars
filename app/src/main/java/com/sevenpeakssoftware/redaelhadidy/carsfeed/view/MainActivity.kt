@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.CarsApplication
 
@@ -43,11 +44,17 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
 
         injection()
 
-        subscribeToPresenter()
-
         initRecyclerView()
 
+        initErrorLayout()
+
         presenter.loadArticle()
+
+        subscribeToPresenter()
+    }
+
+    private fun initErrorLayout() {
+        retry.setOnClickListener { presenter.loadArticle() }
     }
 
     private fun injection() {
@@ -104,11 +111,13 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
     private fun showError(errorMessage: String) {
         toggleViewVisibility(showError = true)
         errorTV.text = errorMessage
-        retry.setOnClickListener { presenter.loadArticle() }
+        error_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
     }
 
     private fun showEmptyMessage() {
         toggleViewVisibility(showEmpty = true)
+        errorTV.text = getString(R.string.sorry_there_is_no_feeds)
+        error_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_text_color))
     }
 
     private fun initRecyclerView() {
@@ -135,8 +144,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
         showLoading: Boolean = false
     ) {
 
-        error_layoutt.visibility = if (showError) View.VISIBLE else View.GONE
-        emptyTV.visibility = if (showEmpty) View.VISIBLE else View.GONE
+        error_layout.visibility = if (showError || showEmpty) View.VISIBLE else View.GONE
+
         articleSRL.visibility = if (showList) View.VISIBLE else View.GONE
         loadingProgressBar.visibility = if (showLoading) View.VISIBLE else View.GONE
 

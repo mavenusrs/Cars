@@ -28,15 +28,20 @@ class ArticleListPresenter @Inject constructor(
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadArticle() {
+        handleLoadingState(true)
         useCase.execute()
             .subscribeOn(subscribeScheduler)
             .observeOn(observerScheduler)
-            .startWith(ResultState.Loading)
-            .subscribe {
+            .subscribe({
                 it?.apply {
                     handleResponse(it)
                 }
-            }.addsTo(compositeDisposable)
+            }, {
+                it?.apply {
+                    handleResponse(ResultState.Failed(ArticleException(throwable = it)))
+                }
+            }).addsTo(compositeDisposable)
+
     }
 
     fun unbound() {
@@ -44,22 +49,19 @@ class ArticleListPresenter @Inject constructor(
     }
 
     private fun handleResponse(resultState: ResultState<List<ArticleContent>>) {
+        handleLoadingState(resultState is ResultState.Loading)
+
         when (resultState) {
             is ResultState.Success -> handleLoadedArticlesSuccessfully(resultState.data)
             is ResultState.Failed -> errorLoadingArticle(resultState.exception)
-            is ResultState.Loading -> handleLoadingState(resultState)
-
         }
     }
 
-    private fun handleLoadingState(loadingState: ResultState.Loading?) {
-        loadingState?.apply {
-            loadingBehaviourSubjectTrigger.trigger(true)
-        }
+    private fun handleLoadingState(loadingState: Boolean) {
+        loadingBehaviourSubjectTrigger.trigger(loadingState)
     }
 
     private fun errorLoadingArticle(failedState: ArticleException) {
-        loadingBehaviourSubjectTrigger.trigger(false)
         errorBehaviourSubjectTrigger.trigger(failedState)
     }
 
