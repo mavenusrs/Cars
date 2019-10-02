@@ -6,7 +6,7 @@ import com.sevenpeakssoftware.redaelhadidy.domain.model.ResultState
 import io.reactivex.Flowable
 import retrofit2.HttpException
 
-abstract class FlowableUseCase<R : Any> {
+abstract class SingleUseCase<R : Any> {
 
     fun execute(): Flowable<ResultState<R>> {
         return run().map {

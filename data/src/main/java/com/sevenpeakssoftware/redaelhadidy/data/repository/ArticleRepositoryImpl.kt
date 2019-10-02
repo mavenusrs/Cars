@@ -10,30 +10,31 @@ import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleResponse
 import com.sevenpeakssoftware.redaelhadidy.domain.repository.ArticleRepository
 
 import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.Single
 
 class ArticleRepositoryImpl(
     private val articleFeedApi: ArticleFeedApi,
     private val articleFeedDAO: ArticleFeedDAO
 ) : ArticleRepository {
 
-    override fun getCarsFeed(): Flowable<ArticleResponse> {
+    override fun getCarsFeed(): Single<ArticleResponse> {
         return articleFeedApi.getCarsFeed().map {
             mapToArticleResponse(it)
         }
     }
 
-    override fun getCashedCarsFeed(): Flowable<List<ArticleContent>> {
-        return articleFeedDAO.getCarsFeed().toFlowable().map {
+    override fun getCashedCarsFeed(): Single<List<ArticleContent>> {
+        return articleFeedDAO.getCarsFeed().map {
             //Simulate delay
-            Thread.sleep(1000)
+            Thread.sleep(500)
             mapToArticleContentsList(it)
         }
     }
 
     override fun cashedCarsFeed(articleContents: List<ArticleContent>): Completable {
-        articleFeedDAO.clearCarsFeed()
-        articleFeedDAO.insertCarsFeeds(mapToArticleContentsListEntity(articleContents))
-        return Completable.complete()
+        return Completable.fromAction {
+            articleFeedDAO.clearCarsFeed()
+            articleFeedDAO.insertCarsFeeds(mapToArticleContentsListEntity(articleContents))
+        }
     }
 }

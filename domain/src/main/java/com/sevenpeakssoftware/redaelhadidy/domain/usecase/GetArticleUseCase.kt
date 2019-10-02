@@ -3,22 +3,24 @@ package com.sevenpeakssoftware.redaelhadidy.domain.usecase
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleContent
 import com.sevenpeakssoftware.redaelhadidy.domain.repository.ArticleRepository
 import com.sevenpeakssoftware.redaelhadidy.domain.sync.SynchronizationEngine
-import com.sevenpeakssoftware.redaelhadidy.domain.usecase.base.FlowableUseCase
+import com.sevenpeakssoftware.redaelhadidy.domain.usecase.base.SingleUseCase
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import org.intellij.lang.annotations.Flow
 
 open class GetArticleUseCase(
     private val articleRepository: ArticleRepository,
     private val synchronizationEngine: SynchronizationEngine
-) : FlowableUseCase<List<ArticleContent>>() {
+) : SingleUseCase<List<ArticleContent>>() {
 
     private val apiPath = "article/get_articles_list"
 
     override fun run(): Flowable<List<ArticleContent>> {
         val carFeedsFromCash = getCarFeedFromCash().subscribeOn(Schedulers.io())
-        var carFeedsFromServer: Flowable<List<ArticleContent>>? = null
+        var carFeedsFromServer: Single<List<ArticleContent>>? = null
 
         if (synchronizationEngine.shouldSyncWithServer(apiPath)) {
             carFeedsFromServer = getCarFeedFromServer().map {
@@ -27,14 +29,11 @@ open class GetArticleUseCase(
                 return@map it.articlesContent
             }.subscribeOn(Schedulers.io())
         }
-        carFeedsFromServer?.apply {
-            return Flowable.concat(carFeedsFromCash, carFeedsFromServer)
-        }
-        return carFeedsFromCash
 
+        return Single.concat(carFeedsFromCash, carFeedsFromServer)
     }
 
-    private fun getCarFeedFromCash(): Flowable<List<ArticleContent>> {
+    private fun getCarFeedFromCash(): Single<List<ArticleContent>> {
         return articleRepository.getCashedCarsFeed()
     }
 
@@ -43,8 +42,7 @@ open class GetArticleUseCase(
     }
 
     private fun saveSyncTime(serverTime: Long): Completable {
-        synchronizationEngine.syncSuccessfully(apiPath, serverTime)
-        return Completable.complete()
+        return Completable.fromAction{synchronizationEngine.syncSuccessfully(apiPath, serverTime)}
     }
 
     private fun getCarFeedFromServer() = articleRepository.getCarsFeed()
