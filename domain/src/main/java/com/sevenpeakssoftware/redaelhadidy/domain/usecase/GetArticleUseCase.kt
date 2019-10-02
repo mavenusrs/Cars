@@ -5,11 +5,9 @@ import com.sevenpeakssoftware.redaelhadidy.domain.repository.ArticleRepository
 import com.sevenpeakssoftware.redaelhadidy.domain.sync.SynchronizationEngine
 import com.sevenpeakssoftware.redaelhadidy.domain.usecase.base.SingleUseCase
 
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import org.intellij.lang.annotations.Flow
 
 open class GetArticleUseCase(
     private val articleRepository: ArticleRepository,
@@ -20,29 +18,31 @@ open class GetArticleUseCase(
 
     override fun run(): Flowable<List<ArticleContent>> {
         val carFeedsFromCash = getCarFeedFromCash().subscribeOn(Schedulers.io())
-        var carFeedsFromServer: Single<List<ArticleContent>>? = null
-
         if (synchronizationEngine.shouldSyncWithServer(apiPath)) {
-            carFeedsFromServer = getCarFeedFromServer().map {
+            return carFeedsFromCash.concatWith(getCarFeedFromServer().map {
                 saveSyncTime(it.serverTime)
                 cashCarsFeed(it.articlesContent)
                 return@map it.articlesContent
-            }.subscribeOn(Schedulers.io())
+            })
+        } else {
+            return carFeedsFromCash.toFlowable()
         }
 
-        return Single.concat(carFeedsFromCash, carFeedsFromServer)
     }
 
     private fun getCarFeedFromCash(): Single<List<ArticleContent>> {
         return articleRepository.getCashedCarsFeed()
     }
 
-    private fun cashCarsFeed(content: List<ArticleContent>): Completable {
+    private fun cashCarsFeed(content: List<ArticleContent>) {
         return articleRepository.cashedCarsFeed(content)
     }
 
-    private fun saveSyncTime(serverTime: Long): Completable {
-        return Completable.fromAction{synchronizationEngine.syncSuccessfully(apiPath, serverTime)}
+    private fun saveSyncTime(serverTime: Long) {
+        synchronizationEngine.syncSuccessfully(
+            apiPath,
+            serverTime
+        )
     }
 
     private fun getCarFeedFromServer() = articleRepository.getCarsFeed()
