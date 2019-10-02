@@ -13,9 +13,6 @@ interface ArticleFeedDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCarsFeeds(articleContentEntities: List<ArticleContentEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCarsFeed(articleContentEntities: ArticleContentEntity)
-
     @Query("DELETE FROM article_tbl")
     fun clearCarsFeed()
 

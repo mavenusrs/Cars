@@ -24,7 +24,7 @@ fun mapToArticleContentsListEntity(contents: List<ArticleContent>): List<Article
 
 fun mapToArticleContentEntity(articleContent: ArticleContent): ArticleContentEntity {
     articleContent.apply {
-        return ArticleContentEntity(
+        return ArticleContentEntity(null,
             id,
             title,
             dateTime,

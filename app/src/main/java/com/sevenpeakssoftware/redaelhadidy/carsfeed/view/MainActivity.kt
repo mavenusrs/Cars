@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
     @Inject
     lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
 
+    private lateinit var adapter: ArticleFeedAdapter
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
         injection()
 
         subscribeToPresenter()
+
+        initRecyclerView()
 
         presenter.loadArticle()
     }
@@ -94,24 +97,22 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
         else errorKeys[1]
     }
 
-    fun showLoading(show: Boolean) {
+    private fun showLoading(show: Boolean) {
         toggleViewVisibility(showLoading = show)
     }
 
-    fun showError(errorMessage: String) {
+    private fun showError(errorMessage: String) {
         toggleViewVisibility(showError = true)
         errorTV.text = errorMessage
         retry.setOnClickListener { presenter.loadArticle() }
     }
 
-    fun showEmptyMessage() {
+    private fun showEmptyMessage() {
         toggleViewVisibility(showEmpty = true)
     }
 
-    fun showListOfArticle(articles: List<ArticleContentParcelable>) {
-        toggleViewVisibility(showList = true)
-
-        val adapter = ArticleFeedAdapter(articles, this)
+    private fun initRecyclerView() {
+        adapter = ArticleFeedAdapter(null, this)
         articleRV.layoutManager = LinearLayoutManager(this)
         articleRV.adapter = adapter
 
@@ -120,6 +121,11 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, HasActivityInject
             articleSRL.isRefreshing = true
         }
 
+    }
+
+    private fun showListOfArticle(articles: List<ArticleContentParcelable>) {
+        toggleViewVisibility(showList = true)
+        adapter.setItems(articles)
     }
 
     private fun toggleViewVisibility(

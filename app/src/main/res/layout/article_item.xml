@@ -8,13 +8,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/lyt_height">
 
         <ImageView
             android:id="@+id/articleIV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/image_height"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/sorry_there_is_no_feeds"
             android:src="@drawable/place_holder" />
 
         <TextView

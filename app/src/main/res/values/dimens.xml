@@ -8,5 +8,8 @@
     <dimen name="ingress_margin">13dp</dimen>
     <dimen name="sub_line_height">20sp</dimen>
     <dimen name="primary_line_height">28sp</dimen>
+    <dimen name="image_height">220dp</dimen>
+    <dimen name="lyt_height">284dp</dimen>
+
 
 </resources>

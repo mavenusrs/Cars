@@ -11,7 +11,7 @@ import com.sevenpeakssoftware.redaelhadidy.carsfeed.common.DateHandler
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.model.ArticleContentParcelable
 import com.squareup.picasso.Picasso
 
-class ArticleFeedAdapter(private val list: List<ArticleContentParcelable>,
+class ArticleFeedAdapter(private var list: List<ArticleContentParcelable>?,
                          private val listener: OnItemClickListener) :
     RecyclerView.Adapter<ArticleFeedAdapter.ArticleViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -20,13 +20,18 @@ class ArticleFeedAdapter(private val list: List<ArticleContentParcelable>,
         return ArticleViewHolder(view)
     }
 
+    fun setItems(items: List<ArticleContentParcelable>){
+        list = items
+        notifyDataSetChanged()
+    }
     override fun getItemCount(): Int {
-        return list.size
+        return list?.size?:0
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        val articleItem = list[position]
-        holder.bindView(articleItem, listener)
+        list?.apply {
+            holder.bindView(this[position], listener)
+        }
     }
 
     class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

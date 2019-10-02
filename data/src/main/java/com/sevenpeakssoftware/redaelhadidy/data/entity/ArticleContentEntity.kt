@@ -9,7 +9,11 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "article_tbl")
 data class ArticleContentEntity (
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "myId")
+    @SerializedName("myId")
+    @Expose
+    var myIid: Int? = null,
     @ColumnInfo(name = "id")
     @SerializedName("id")
     @Expose
@@ -47,5 +51,5 @@ data class ArticleContentEntity (
     @Ignore
     var changed: Int
 ){
-    constructor():this(null,"", "", null, null, "", "", 0, 0)
+    constructor():this(null, null,"", "", null, null, "", "", 0, 0)
 }
