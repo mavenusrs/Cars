@@ -25,6 +25,8 @@ class ArticleRepositoryImpl(
 
     override fun getCashedCarsFeed(): Flowable<List<ArticleContent>> {
         return articleFeedDAO.getCarsFeed().toFlowable().map {
+            //Simulate delay
+            Thread.sleep(1000)
             mapToArticleContentsList(it)
         }
     }

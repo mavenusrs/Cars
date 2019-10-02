@@ -7,6 +7,7 @@ import com.sevenpeakssoftware.redaelhadidy.domain.usecase.base.FlowableUseCase
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 
 open class GetArticleUseCase(
     private val articleRepository: ArticleRepository,
@@ -16,7 +17,7 @@ open class GetArticleUseCase(
     private val apiPath = "article/get_articles_list"
 
     override fun run(): Flowable<List<ArticleContent>> {
-        val carFeedsFromCash = getCarFeedFromCash()
+        val carFeedsFromCash = getCarFeedFromCash().subscribeOn(Schedulers.io())
         var carFeedsFromServer: Flowable<List<ArticleContent>>? = null
 
         if (synchronizationEngine.shouldSyncWithServer(apiPath)) {
@@ -24,7 +25,7 @@ open class GetArticleUseCase(
                 saveSyncTime(it.serverTime)
                 cashCarsFeed(it.articlesContent)
                 return@map it.articlesContent
-            }
+            }.subscribeOn(Schedulers.io())
         }
         carFeedsFromServer?.apply {
             return Flowable.concat(carFeedsFromCash, carFeedsFromServer)
