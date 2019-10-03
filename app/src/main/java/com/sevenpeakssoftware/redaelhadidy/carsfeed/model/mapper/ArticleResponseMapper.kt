@@ -26,7 +26,7 @@ fun mapToArticleContent(articleContent: ArticleContent): ArticleContentParcelabl
         return ArticleContentParcelable(
             id,
             title,
-            dateTime,
+            created,//assume this is publish day
             ingress,
             image
         )

@@ -28,7 +28,7 @@ class SynchronizationEngine(private val synchronizationRepository: Synchronizati
         val lastSyncedTimeInMillis = synchronizationRepository.getLastRequestTimeDate(apiPath)
         if (lastSyncedTimeInMillis != null) {  //is valid
             val expiredCashTimeInMillis = lastSyncedTimeInMillis + timeToRefreshOnInMillis
-            val currentTimeInMillis = Calendar.getInstance().timeInMillis
+            val currentTimeInMillis = Calendar.getInstance(TimeZone.getTimeZone("UTC")).timeInMillis
 
             if (expiredCashTimeInMillis >= currentTimeInMillis) {
                 return false

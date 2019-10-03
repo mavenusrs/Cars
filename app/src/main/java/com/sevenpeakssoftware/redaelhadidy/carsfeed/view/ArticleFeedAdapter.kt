@@ -45,7 +45,7 @@ class ArticleFeedAdapter(private var list: List<ArticleContentParcelable>?,
                 articleTitleTV.text = articleContentParcelable.title
                 articleContentParcelable.dateTime?.also {
                     articleDateTimeTV.text =
-                        DateHandler(itemView.context).toFormatedDateTime(it)
+                        DateHandler(itemView.context).toFormattedDateTimeUTC(it * 1000)
                 }
 
                 articleIngressTV.text = articleContentParcelable.ingress

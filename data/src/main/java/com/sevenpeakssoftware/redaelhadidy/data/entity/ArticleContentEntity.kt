@@ -45,11 +45,11 @@ data class ArticleContentEntity (
     @SerializedName("created")
     @Expose
     @Ignore
-    var created: Int,
+    var created: Long,
     @SerializedName("changed")
     @Expose
     @Ignore
-    var changed: Int
+    var changed: Long
 ){
     constructor():this(null, null,"", "", null, null, "", "", 0, 0)
 }

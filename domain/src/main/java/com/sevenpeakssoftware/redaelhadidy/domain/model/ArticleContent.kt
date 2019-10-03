@@ -8,6 +8,6 @@ data class ArticleContent(
     val contents: List<Content>?,
     val ingress: String,
     val image: String,
-    val created: Int,
-    val changed: Int
+    val created: Long,
+    val changed: Long
 )

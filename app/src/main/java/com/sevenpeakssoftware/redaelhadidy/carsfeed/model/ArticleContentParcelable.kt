@@ -8,11 +8,12 @@ package com.sevenpeakssoftware.redaelhadidy.carsfeed.model
  */
 import android.os.Parcel
 import android.os.Parcelable
+import java.util.*
 
 data class ArticleContentParcelable(
      val id: Int?,
      val title: String?,
-     val dateTime: String?,
+     val dateTime: Long?,
      val ingress: String?,
      val image: String?
 ) : Parcelable {
@@ -20,16 +21,16 @@ data class ArticleContentParcelable(
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),
-        parcel.readString(),
+        parcel.readLong(),
         parcel.readString(),
         parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.readInt()
-        parcel.writeString(title)
-        parcel.writeString(dateTime)
-        parcel.writeString(ingress)
+        parcel.writeString(title?:"")
+        parcel.writeLong(dateTime?:Calendar.getInstance(TimeZone.getTimeZone("UTC")).timeInMillis)
+        parcel.writeString(ingress?:"")
         parcel.writeString(image)
     }
 

@@ -5,11 +5,13 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.CarsApplication
 
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.R
+import com.sevenpeakssoftware.redaelhadidy.carsfeed.common.DateHandler
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.common.addsTo
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.model.ArticleContentParcelable
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.presenter.ArticleListPresenter
