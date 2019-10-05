@@ -13,7 +13,7 @@ class SynchronizationEngine(private val synchronizationRepository: Synchronizati
     fun syncSuccessfully(apiPath: String, serverTime: Long) {
         synchronizationRepository.saveRequestTimeDate(apiPath, serverTime)
     }
-
+    //May be used later
     fun syncFailed(apiPath: String) {
         synchronizationRepository.removeRequestTimeDate(apiPath)
     }

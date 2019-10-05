@@ -12,13 +12,13 @@ import com.sevenpeakssoftware.redaelhadidy.domain.model.Content
  */
 
 fun mapToArticleContentsListEntity(contents: List<ArticleContent>): List<ArticleContentEntity> {
-    val articleContentEntitis = ArrayList<ArticleContentEntity>()
+    val articleContentEntities = ArrayList<ArticleContentEntity>()
 
     contents.map {
-        articleContentEntitis.add(mapToArticleContentEntity(it))
+        articleContentEntities.add(mapToArticleContentEntity(it))
     }
 
-    return articleContentEntitis
+    return articleContentEntities
 }
 
 

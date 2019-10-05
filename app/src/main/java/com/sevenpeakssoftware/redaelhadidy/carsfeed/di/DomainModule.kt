@@ -16,22 +16,23 @@ import com.sevenpeakssoftware.redaelhadidy.domain.sync.SynchronizationEngine
 import com.sevenpeakssoftware.redaelhadidy.domain.usecase.GetArticleUseCase
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 open class DomainModule {
 
+    @ActivityScope
     @Provides
     fun provideDatabase(context: Context): ArticleFeedDatabase {
         return Room.databaseBuilder(context, ArticleFeedDatabase::class.java, DATABASE_NAME).build()
     }
 
+    @ActivityScope
     @Provides
     fun provideArticleFeedDAP(articleFeedDatabase: ArticleFeedDatabase): ArticleFeedDAO {
         return articleFeedDatabase.articleDAO()
     }
 
-    @Singleton
+    @ActivityScope
     @Provides
     fun provideArticleRepository(
         articleFeedApi: ArticleFeedApi,
@@ -39,7 +40,7 @@ open class DomainModule {
         return ArticleRepositoryImpl(articleFeedApi, articleFeedDAO)
     }
 
-    @Singleton
+    @ActivityScope
     @Provides
     fun provideSynchronizationRepository(
         sharedPreferencesHandler: SharedPreferenceHandler,
@@ -47,7 +48,7 @@ open class DomainModule {
         return SynchronizationRepositoryImpl(sharedPreferencesHandler, deviceHandler)
     }
 
-    @Singleton
+    @ActivityScope
     @Provides
     open fun provideGetArticleUseCase(
         articleRepository: ArticleRepository,

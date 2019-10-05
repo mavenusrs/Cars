@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/articleIV"
-            android:background="@drawable/text_bg_gradiant"
+            android:background="@drawable/text_bg_gradient"
             android:fontFamily="@font/roboto_medium"
             android:gravity="start"
             android:lineHeight="@dimen/primary_line_height"

@@ -7,11 +7,11 @@ import io.reactivex.subjects.BehaviorSubject
 class BehaviorSubjectTrigger<T> {
 
     private val behaviorSubject = BehaviorSubject.create<T>()
-    private val EMPTY = Any()
+    private val empty = Any()
 
     fun trigger(value: T){
         if (value == null){
-            behaviorSubject.onNext(EMPTY as T)
+            behaviorSubject.onNext(empty as T)
             return
         }
 
@@ -21,14 +21,14 @@ class BehaviorSubjectTrigger<T> {
     fun observer(): Observable<T> {
 
         return behaviorSubject.filter {
-            it != EMPTY
+            it != empty
         }.doOnNext{ clear(it) }
 
     }
 
-    fun clear(value: T){
-        if (value != EMPTY){
-            behaviorSubject.onNext(EMPTY as T)
+    private fun clear(value: T){
+        if (value != empty){
+            behaviorSubject.onNext(empty as T)
         }
     }
 }

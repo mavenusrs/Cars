@@ -4,6 +4,8 @@ import com.sevenpeakssoftware.redaelhadidy.carsfeed.model.ArticleContentParcelab
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.model.mapper.mapToArticleContentsParcelList
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.common.BehaviorSubjectTrigger
 import com.sevenpeakssoftware.redaelhadidy.carsfeed.common.addsTo
+import com.sevenpeakssoftware.redaelhadidy.carsfeed.di.Observer
+import com.sevenpeakssoftware.redaelhadidy.carsfeed.di.Subscriber
 import com.sevenpeakssoftware.redaelhadidy.domain.errorchecker.ArticleException
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ArticleContent
 import com.sevenpeakssoftware.redaelhadidy.domain.model.ResultState
@@ -11,12 +13,11 @@ import com.sevenpeakssoftware.redaelhadidy.domain.usecase.GetArticleUseCase
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
-import javax.inject.Named
 
 class ArticleListPresenter @Inject constructor(
     private val useCase: GetArticleUseCase,
-    @Named("subscribe") private val subscribeScheduler: Scheduler,
-    @Named("observer") private val observerScheduler: Scheduler
+    @Subscriber private val subscribeScheduler: Scheduler,
+    @Observer private val observerScheduler: Scheduler
 ) {
     val articlesBehaviourSubjectTrigger =
         BehaviorSubjectTrigger<List<ArticleContentParcelable>>()

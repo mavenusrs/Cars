@@ -5,22 +5,21 @@ import dagger.Provides
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class SchedularModule {
+class SchedulerModule {
 
     @Singleton
     @Provides
-    @Named("subscribe")
+    @Subscriber
     fun provideSubscriber(): Scheduler {
         return Schedulers.io()
     }
 
     @Singleton
     @Provides
-    @Named("observer")
+    @Observer
     fun provideObserver(): Scheduler {
         return AndroidSchedulers.mainThread()
     }

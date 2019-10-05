@@ -10,12 +10,11 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sevenpeakssoftware.redaelhadidy.carsfeed"
-        minSdkVersion 21
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        testInstrumentationRunner "com.sevenpeakssoftware.redaelhadidy.carsfeed.view.MockTestRunner"
 
     }
     buildTypes {
@@ -36,7 +35,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.core:core-ktx:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
 
     //Test
     testImplementation "androidx.test.ext:junit:$junit_version"
@@ -62,6 +61,7 @@ dependencies {
 
     //Dagger
     implementation "com.google.dagger:dagger-android:${dagger2_Version}"
+    implementation "com.google.dagger:dagger:${dagger2_Version}"
     implementation "com.google.dagger:dagger-android-support:${dagger2_Version}"
     kapt "com.google.dagger:dagger-android-processor:${dagger2_Version}"
     kapt "com.google.dagger:dagger-compiler:${dagger2_Version}"
